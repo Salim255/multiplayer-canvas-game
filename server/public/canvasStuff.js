@@ -1,9 +1,7 @@
 // We will call this init function, when user
 // click on start game
 const init = () => {
-    console.log('====================================');
-    console.log("hello from int");
-    console.log('====================================');
+    console.log("hello from int, Hello canvas", orbs);
     draw()
 }
 
@@ -23,6 +21,10 @@ player.locY = Math.floor(500  * Math.random() + 10 );
 // We also add the mouse listeners here, so that as the mouse moves, the 
 // player orb will move towards the mouse accordingly
 const draw = () => {
+    
+    // Reset the context translate back to default
+    // Its override the current transformation
+    context.setTransform(1,0,0, 1,0,0);
 
     // What clear does is it goes to the context and
     // says, hey, start at the very top left by which is 0, 0
@@ -30,10 +32,6 @@ const draw = () => {
     // This called every time the draw called.
     // Clears out the canvas, so we can draw on a clean canvas next frame
     context.clearRect(0, 0, canvas.width, canvas.height)
-    
-    // Reset the context translate back to default
-    // Its override the current transformation
-    context.setTransform(1,0,0, 1,0,0)
 
     // Clamp the screen/vp to the player location (x, y)
     const camX = -player.locX + canvas.width/2 ;
@@ -62,6 +60,19 @@ const draw = () => {
     context.strokeStyle = 'rgb(0, 255, 0)'; // Draw a green line
     context.stroke(); // This actually draw the line (the border)
 
+    orbs.forEach(orb => {
+        //console.log(orb, "hello from ")
+        // This will start a new path
+        // Will tell canvas we are about to draw something new
+        // And so pick your pencil up and move it to the new location
+        context.beginPath(); 
+        context.fillStyle = orb.color;
+        // Draw it
+        context.arc(orb.locX, orb.locY, orb.radius , 0 , Math.PI*2);
+        // Fill it in
+        context.fill()
+    });
+
     // requestAnimationFrame is like a controlled loop
     // Its going to run till we stop it
     // Its run recursively, every paint/frame. If the framerate is 35 fps
@@ -69,7 +80,6 @@ const draw = () => {
 }
 
 canvas.addEventListener('mousemove',(event)=>{
-    console.log(player.locX, player.locY)
     const mousePosition = {
         x: event.clientX,
         y: event.clientY
