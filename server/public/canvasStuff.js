@@ -1,9 +1,3 @@
-// We will call this init function, when user
-// click on start game
-const init = () => {
-    console.log("hello from int, Hello canvas", orbs);
-    draw()
-}
 
 player.locX = Math.floor(500  * Math.random() + 10 );
 player.locY = Math.floor(500  * Math.random() + 10 );
