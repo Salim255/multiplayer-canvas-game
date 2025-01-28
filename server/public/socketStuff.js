@@ -27,8 +27,11 @@ const init = async () => {
 // The server sends out the locationall/data of all  players 
 socket.on('tick', (playersArray ) => {
     players = playersArray; // The players coming form uiStuff
-    player.locX = players[player.indexInPlayers].playerData.locX;
-    player.locY = players[player.indexInPlayers].playerData.locY;
+    if (players[player.indexInPlayers].playerData.locX) {
+        player.locX = players[player.indexInPlayers].playerData.locX;
+        player.locY = players[player.indexInPlayers].playerData.locY;
+    }
+ 
 })
 
 
@@ -40,3 +43,15 @@ socket.on('orbSwitch', (orbData) => {
 socket.on('playerAbsorbed', absorbData => {
     console.log('Player absorbed', absorbData.absorbed )
 })
+
+socket.on('updateLeaderBoard', leaderBoardArray => {
+    leaderBoardArray.sort((a,b) =>{
+        return b.score - a.score;
+    })
+    
+    document.querySelector('.leader-board').innerHTML = "";
+    leaderBoardArray.forEach(p => {
+        document.querySelector('.leader-board').innerHTML += `
+        <li class="leaderboard-player"> ${p.name} - ${p.score}</li>`
+    });
+} )
