@@ -12,7 +12,6 @@ const init = async () => {
 
     // Our await has resolved, so start talking
     setInterval(() => {
-        console.log(player)
         socket.emit('tock', {
             xVector: player.xVector ? player.xVector : .1 ,
             yVector: player.yVector ? player.yVector : .1 
@@ -36,4 +35,8 @@ socket.on('tick', (playersArray ) => {
 socket.on('orbSwitch', (orbData) => {
     // The server just told us an orb was absorbed, Replaced on the orbs array
     orbs.splice(orbData.capturedOrbI, 1, orbData.newOrb)
+})
+
+socket.on('playerAbsorbed', absorbData => {
+    console.log('Player absorbed', absorbData.absorbed )
 })

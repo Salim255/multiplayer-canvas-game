@@ -122,7 +122,13 @@ io.on('connect', (socket) => {
             // Emit all sockets display the game, the orbSwitch event so it 
             // can update orbs..
             io.to('game').emit('orbSwitch', orbData);
+        }
 
+        // Player collision of tocking player
+        const absorbData = checkForPlayerCollisions(player.playerData, player.playerConfig, players, playersForUsers, socket.id);
+
+        if(absorbData) {
+            io.to('game').emit('playerAbsorbed', absorbData);
         }
     })
     socket.on('disconnect', () => {

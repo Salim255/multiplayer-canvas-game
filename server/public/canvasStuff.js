@@ -38,7 +38,9 @@ const draw = () => {
     players.forEach(p => {
         // This telling the context that,I am ready to draw
         context.beginPath();
-
+        if (!p?.playerData) {
+            return
+        }
         // This going to tell the context that , whatever we are about to draw
         context.fillStyle = p.playerData.color;
     
