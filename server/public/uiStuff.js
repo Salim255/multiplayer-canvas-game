@@ -18,6 +18,7 @@ canvas.width = wWidth;
 // This will be all things "this" player
 const player = {}
 let orbs = []; // This is a global for all non-player orbs
+let players = []; // This is an array of all players
 
 // Put the modals into variables , so we can interact with them 
 const loginModal = new bootstrap.Modal(document.querySelector('#loginModal'));

@@ -16,6 +16,7 @@ const init = async () => {
 }
 
 
-socket.on('tick', (players) => {
+socket.on('tick', (playersArray) => {
     console.log(players)
+    players = playersArray; // The players coming form uiStuff
 })
