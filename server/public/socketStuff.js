@@ -5,27 +5,29 @@ const socket = io.connect('http://localhost:3500');
 // We will call this init function, when user
 // click on start game
 const init = async () => {
-    const initOrbs = await socket.emitWithAck('init',  {
+    const initData = await socket.emitWithAck('init',  {
         // Player comes from uiStuff.js
         playerName: player.name
     })
 
     // Our await has resolved, so start talking
     setInterval(() => {
-        socket.emit('talk', {
-            xVector: player.xVector,
-            yVector: player.yVector
+        console.log(player)
+        socket.emit('tock', {
+            xVector: player.xVector ? player.xVector : .1 ,
+            yVector: player.yVector ? player.yVector : .1 
         })
     },33);
 
-    console.log(initOrbs);
-    orbs = initOrbs;
+    orbs = initData.orbs;
+    player.indexInPlayers = initData.indexInPlayers;
     // Init is called inside of start-game handler
     draw(); // Draw function is inside canvasStuff.js
 }
 
-
-socket.on('tick', (playersArray) => {
-    console.log(players)
+// The server sends out the locationall/data of all  players 
+socket.on('tick', (playersArray ) => {
     players = playersArray; // The players coming form uiStuff
+    player.locX = players[player.indexInPlayers].playerData.locX;
+    player.locY = players[player.indexInPlayers].playerData.locY;
 })

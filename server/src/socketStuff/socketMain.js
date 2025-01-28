@@ -9,6 +9,7 @@ const Player = require('./classes/Player');
 const PlayerConfig = require('./classes/PlayerConfig');
 const PlayerData = require('./classes/PlayerData');
 const Orb =  require('./classes/Orb');
+
 // =============END===================
 
 // Make an orbs array that will host all 500/5000 NOT PLAYER orbs
@@ -23,12 +24,13 @@ const settings = {
     worldHeight: 500,
     defaultGenericOrbSize: 5, // Smaller than player orbs
 }
-const players = []
-
+const players = [];
+const playersForUsers = [];
+let tickTockInterval ;
 // On server start, to make our initial defaultNumberOfOrbs
 initGame();
 
-let tickTockInterval ;
+
 
 // This run every time, someone join the main namespace
 io.on('connect', (socket) => {
@@ -36,14 +38,16 @@ io.on('connect', (socket) => {
     // A player has connected
     // The event that runs on join that does init game stuff
     socket.on('init', (playerObj, ackCallBack) =>  {
-
+        console.log(player, "Hello object")
+        player = playerObj;
         // Someone is about to be added to the players, 
         // start tick-tocking
         if (players.length === 0) { 
              // Tick-tock - issue an event to every connected socket
             // that is playing the game 30 times per second
             tickTockInterval = setInterval(() => {
-                io.to('game').emit('tick', players) // Send the event to the game room
+                //console.log( playersForUsers, "hello palyers");
+                io.to('game').emit('tick', playersForUsers) // Send the event to the game room
             }, 33); // 1000/30, there are 33, 30's in 1000 millisecond
             // so if we want to run something 30 time in a second, then we need to run 
             // run every 33 millisecond
@@ -54,25 +58,33 @@ io.on('connect', (socket) => {
         // 1)Make the playerConfig object -
         // the data specific to this player, that only the player needs to know
         const playerConfig = new PlayerConfig(settings);
+       
         // 2) Make the playerData object - 
         // the data specific to this player that everyone needs to know
         const playerName = playerObj.playerName;
         const playerData = new PlayerData(playerName, settings);
         // 3) Master player object - to house both,
         // for the server to be able to truck the player
-        const player = new Player(socket.id ,playerConfig , playerData);
-        players.push(player)
-        ackCallBack(orbs); // Send the orbs array back as an ack function
+        player = new Player(socket.id ,playerConfig , playerData);
+        players.push(player); /// Server use only 
+        playersForUsers.push({playerData});
+        ackCallBack({ orbs, indexInPlayers: playersForUsers.length - 1 }); // Send the orbs array back as an ack function
     
     })
 
     // The client sent over a talk
-    socket.on('talk', (data) => {
+    socket.on('tock', (data) => {
         // To make the player look faster
+        if (!player.playerConfig) {
+            //console.log("player config")
+            // This because the client kept talking after disconnect
+            return
+        }
         speed = player.playerConfig.speed ;
+
         const xV = player.playerConfig.xVector  = data.xVector;
         const yV = player.playerConfig.yVector = data.yVector;
-
+    
         // Here we check the player location is, if it's below five
         // in the case of the vector is going left,
         // or if it's above 500 X , then the vector up,

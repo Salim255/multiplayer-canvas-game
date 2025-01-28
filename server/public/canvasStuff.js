@@ -103,8 +103,7 @@ canvas.addEventListener('mousemove',(event)=>{
         // Mouse is in the top right quadrant
     }
 
-  
-    player.xVector = xVector;
-    player.yVector = yVector;
+    player.xVector = xVector ? xVector : .1;
+    player.yVector = yVector ? yVector : .1;
 })
 // The canvas is how javascript draw the stuffs
