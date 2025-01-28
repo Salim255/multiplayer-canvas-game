@@ -103,24 +103,8 @@ canvas.addEventListener('mousemove',(event)=>{
         // Mouse is in the top right quadrant
     }
 
-    // To make the player look faster
-    speed = 10;
-    xV = xVector;
-    yV = yVector;
-
-    // Here we check the player location is, if it's below five
-    // in the case of the vector is going left,
-    // or if it's above 500 X , then the vector up,
-    // that means the player is trying to go off the grid
-    // in that case we only move the player in the y axis.
-    // You cant leave the x axis or you run off the map
-    if((player.locX < 5 && xV < 0) || (player.locX > 500) && (xV > 0)){
-        player.locY -= speed * yV;
-    }else if((player.locY < 5 && yV > 0) || (player.locY > 500) && (yV < 0)){
-        player.locX += speed * xV;
-    }else{
-        player.locX += speed * xV;
-        player.locY -= speed * yV;
-    }    
+  
+    player.xVector = xVector;
+    player.yVector = yVector;
 })
 // The canvas is how javascript draw the stuffs

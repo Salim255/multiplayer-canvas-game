@@ -9,6 +9,15 @@ const init = async () => {
         // Player comes from uiStuff.js
         playerName: player.name
     })
+
+    // Our await has resolved, so start talking
+    setInterval(() => {
+        socket.emit('talk', {
+            xVector: player.xVector,
+            yVector: player.yVector
+        })
+    },33);
+
     console.log(initOrbs);
     orbs = initOrbs;
     // Init is called inside of start-game handler
