@@ -32,6 +32,7 @@ let tickTockInterval ;
 
 // This run every time, someone join the main namespace
 io.on('connect', (socket) => {
+    let player = {};
     // A player has connected
     // The event that runs on join that does init game stuff
     socket.on('init', (playerObj, ackCallBack) =>  {
@@ -65,6 +66,28 @@ io.on('connect', (socket) => {
     
     })
 
+    // The client sent over a talk
+    socket.on('talk', (data) => {
+        // To make the player look faster
+        speed = player.playerConfig.speed ;
+        const xV = player.playerConfig.xVector  = data.xVector;
+        const yV = player.playerConfig.yVector = data.yVector;
+
+        // Here we check the player location is, if it's below five
+        // in the case of the vector is going left,
+        // or if it's above 500 X , then the vector up,
+        // that means the player is trying to go off the grid
+        // in that case we only move the player in the y axis.
+        // You cant leave the x axis or you run off the map
+        if((player.playerData.locX < 5 && xV < 0) || (player.playerData.locX > 500) && (xV > 0)){
+            player.playerData.locY -= speed * yV;
+        }else if((player.playerData.locY < 5 && yV > 0) || (player.playerData.locY > 500) && (yV < 0)){
+            player.playerData.locX += speed * xV;
+        }else{
+            player.playerData.locX += speed * xV;
+            player.playerData.locY -= speed * yV;
+        }
+    })
     socket.on('disconnect', () => {
         // Check to see if players is empty
         // if so, stop ticking
