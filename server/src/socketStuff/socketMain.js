@@ -19,12 +19,12 @@ const Orb =  require('./classes/Orb');
 // Every time one is absorb, the server will make a new one
 const orbs = [];
 const settings = {
-    defaultNumberOfOrbs: 500, // The number of orbs on the map
+    defaultNumberOfOrbs: 5000, // The number of orbs on the map
     defaultSpeed: 6, // Player speed, how fast they go
     defaultSize: 6, // Default player size
     defaultZoom: 1.5, // as the player gets bigger, zoom needs to go out
-    worldWidth: 500,
-    worldHeight: 500,
+    worldWidth: 5000,
+    worldHeight: 5000,
     defaultGenericOrbSize: 5, // Smaller than player orbs
 }
 const players = [];
@@ -135,6 +135,16 @@ io.on('connect', (socket) => {
         }
     })
     socket.on('disconnect', () => {
+        // Loop through players and find the player with this players sockedId
+        // and splice that player out
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].socketId === player.socketId) {
+                // This is the droid we are looking for
+                players.splice(i, 1, {});
+                playersForUsers.splice(i, 1, {});
+                break;
+            }
+        }
         // Check to see if players is empty
         // if so, stop ticking
         if (players.length === 0) {
@@ -160,6 +170,5 @@ function getLeaderBoard() {
         }
         return {};
     })
-
     return leaderBoardArray ;
 }
