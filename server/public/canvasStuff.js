@@ -32,28 +32,34 @@ const draw = () => {
     const camY = -player.locY + canvas.height/2 ;
     // Translate move the canvas/context to where the player is at
     context.translate(camX, camY)
-    // This telling the context that,I am ready to draw
-    context.beginPath();
-
-    // This going to tell the context that , whatever we are about to draw
-    // is going to be red
-    context.fillStyle = 'rgb(255, 0, 0)';
 
 
-    // Context.arc, give us the ability to draw an arc
-    // it's makes a circle
-    context.arc(player.locX, player.locY, 10 ,0 , Math.PI*2); // Draw arc/circle
-    // arg1, arg2, are center x and y of the arc
-    // arg3 is the radius of the circle
-    // arg4, is where to start drawing in radians - 0 = 3:00
-    // arg5 is where to stop the drawing in radians - Pi = 90deg
+    //=========== In this section we draw all the players=========
+    players.forEach(p => {
+        // This telling the context that,I am ready to draw
+        context.beginPath();
 
-    // This fill the circle, with the given color
-    context.fill(); 
-    context.lineWidth = 3; // How wide to draw a line in pixels
-    context.strokeStyle = 'rgb(0, 255, 0)'; // Draw a green line
-    context.stroke(); // This actually draw the line (the border)
+        // This going to tell the context that , whatever we are about to draw
+        context.fillStyle = p.playerData.color;
+    
+        // Context.arc, give us the ability to draw an arc
+        // it's makes a circle
+        context.arc(p.playerData.locX, p.playerData.locY, p.playerData.radius ,0 , Math.PI*2); // Draw arc/circle
+        // arg1, arg2, are center x and y of the arc
+        // arg3 is the radius of the circle
+        // arg4, is where to start drawing in radians - 0 = 3:00
+        // arg5 is where to stop the drawing in radians - Pi = 90deg
+    
+        // This fill the circle, with the given color
+        context.fill(); 
+        context.lineWidth = 3; // How wide to draw a line in pixels
+        context.strokeStyle = 'rgb(0, 255, 0)'; // Draw a green line
+        context.stroke(); // This actually draw the line (the border)
+    })
 
+  
+
+    // ========= Draw all the orbs ========
     orbs.forEach(orb => {
         //console.log(orb, "hello from ")
         // This will start a new path
