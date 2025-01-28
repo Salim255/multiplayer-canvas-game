@@ -39,6 +39,8 @@ const draw = () => {
         // This telling the context that,I am ready to draw
         context.beginPath();
         if (!p?.playerData) {
+            // If the playerData doesn't exist, this is absorbed player
+            // so don't draw it
             return
         }
         // This going to tell the context that , whatever we are about to draw

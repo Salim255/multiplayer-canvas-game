@@ -103,7 +103,6 @@ io.on('connect', (socket) => {
             player.playerData.locY -= speed * yV;
         }
 
-
         // Check for the tocking player to hit orbs
         const capturedOrbI = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings);
 
@@ -122,6 +121,10 @@ io.on('connect', (socket) => {
             // Emit all sockets display the game, the orbSwitch event so it 
             // can update orbs..
             io.to('game').emit('orbSwitch', orbData);
+
+            // Emit to all sockets playing the game, the updateLeaderBoard 
+            // event because someone just scored
+            io.to('game').emit('updateLeaderBoard', getLeaderBoard())
         }
 
         // Player collision of tocking player
@@ -145,4 +148,18 @@ function initGame(){
         const newOrb = new Orb(settings)
         orbs.push(newOrb);
     }
+}
+
+function getLeaderBoard() {
+    const leaderBoardArray = players.map(curPlayer => {
+        if (curPlayer.playerData) {
+            return {
+                name: curPlayer.playerData.name,
+                score: curPlayer.playerData.score
+            }
+        }
+        return {};
+    })
+
+    return leaderBoardArray ;
 }
