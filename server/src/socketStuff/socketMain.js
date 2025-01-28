@@ -3,12 +3,15 @@ const io = require('../../server').io;
 // oh... we need express, get app, but only put what we need to inside 
 // of our socket stuff
 const app  = require('../../server').app;
+const checkForOrbCollisions = require('./checkCollisions').checkForOrbCollisions;
+const checkForPlayerCollisions = require('./checkCollisions').checkForPlayerCollisions;
 
 // ============= CLASSES ========
 const Player = require('./classes/Player');
 const PlayerConfig = require('./classes/PlayerConfig');
 const PlayerData = require('./classes/PlayerData');
 const Orb =  require('./classes/Orb');
+
 
 // =============END===================
 
@@ -91,13 +94,35 @@ io.on('connect', (socket) => {
         // that means the player is trying to go off the grid
         // in that case we only move the player in the y axis.
         // You cant leave the x axis or you run off the map
-        if((player.playerData.locX < 5 && xV < 0) || (player.playerData.locX > 500) && (xV > 0)){
-            player.playerData.locY -= speed * yV;
-        }else if((player.playerData.locY < 5 && yV > 0) || (player.playerData.locY > 500) && (yV < 0)){
+        // == If the player can move to the x move
+        if((player.playerData.locX > 5 && xV < 0) || (player.playerData.locX < settings.worldWidth) && (xV > 0)){
             player.playerData.locX += speed * xV;
-        }else{
-            player.playerData.locX += speed * xV;
+        }
+        // == If the player can move to the y move
+        if((player.playerData.locY > 5 && yV > 0) || (player.playerData.locY < settings.worldHeight) && (yV < 0)){
             player.playerData.locY -= speed * yV;
+        }
+
+
+        // Check for the tocking player to hit orbs
+        const capturedOrbI = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings);
+
+        // Function return null if not collision, an index if there is a collision
+        if (capturedOrbI !== null) {
+            // Remove the orb that needs to be replaced ( at capturedOrbI)
+            // then add a new Orb
+            orbs.splice(capturedOrbI, 1, new Orb(settings));
+
+            // New update the client with the new orb
+            const orbData = {
+                capturedOrbI,
+                newOrb: orbs[capturedOrbI]
+            }
+
+            // Emit all sockets display the game, the orbSwitch event so it 
+            // can update orbs..
+            io.to('game').emit('orbSwitch', orbData);
+
         }
     })
     socket.on('disconnect', () => {

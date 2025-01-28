@@ -31,3 +31,9 @@ socket.on('tick', (playersArray ) => {
     player.locX = players[player.indexInPlayers].playerData.locX;
     player.locY = players[player.indexInPlayers].playerData.locY;
 })
+
+
+socket.on('orbSwitch', (orbData) => {
+    // The server just told us an orb was absorbed, Replaced on the orbs array
+    orbs.splice(orbData.capturedOrbI, 1, orbData.newOrb)
+})
