@@ -13,7 +13,7 @@ const expressServer = app.listen( PORT,() => {
     console.log('Socket server run on port: ', PORT)
 })
 
-const io = socketio(expressServer, { cors: { origin: "*" } });
+const io = socketio(expressServer, { cors: { origin: "*", methods: ["GET", "POST"] } });
 
 // App organization
 // server.js is NOT the entry point. it create our servers
