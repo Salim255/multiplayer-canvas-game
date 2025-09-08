@@ -5,11 +5,12 @@ const socket = io.connect('http://localhost:3500');
 // We will call this init function, when user
 // click on start game
 const init = async () => {
+ 
     const initData = await socket.emitWithAck('init',  {
-        // Player comes from uiStuff.js
-        playerName: player.name
+    // Player comes from uiStuff.js
+    playerName: player.name
     })
-
+  
     // Our await has resolved, so start talking
     setInterval(() => {
         socket.emit('tock', {
