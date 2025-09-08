@@ -1,6 +1,8 @@
 // Connect to socket server
 // Connect to the main namespace
-const socket = io();
+const socket = io({
+  transports: ["websocket"]
+});
 
 // We will call this init function, when user
 // click on start game
