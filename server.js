@@ -8,7 +8,7 @@ const app = express();
 app.use(express.static(__dirname+'/public'));
 
 
-const PORT = 3500;
+const PORT = process.env.PORT || 3500;
 const expressServer = app.listen( PORT,() => {
     console.log('Socket server run on port: ', PORT)
 })
