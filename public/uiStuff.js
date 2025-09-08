@@ -39,11 +39,12 @@ document.querySelector('.name-form').addEventListener('submit', (e) => {
 })
 
 
-document.querySelector('.start-game').addEventListener('click', (e) => {
+document.querySelector('.start-game').addEventListener('click',  (e) => {
     // Hide the start modal 
     spawnModal.hide()
     // Show the hiddenStart elements
     const elArray = Array.from(document.querySelectorAll('.hiddenOnStart'));
     elArray.forEach(el => el.removeAttribute('hidden') );
+    
     init(); // Init is inside if socketStuff.js
 })
