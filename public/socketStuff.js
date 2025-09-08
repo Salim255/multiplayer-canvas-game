@@ -1,6 +1,6 @@
 // Connect to socket server
 // Connect to the main namespace
-const socket = io.connect("https://multiplayer-canvas-game.onrender.com:3500");
+const socket = io.connect("https://multiplayer-canvas-game.onrender.com");
 
 // We will call this init function, when user
 // click on start game
