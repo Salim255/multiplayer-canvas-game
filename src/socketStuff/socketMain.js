@@ -36,6 +36,7 @@ initGame();
 // This run every time, someone join the main namespace
 io.on('connect', (socket) => {
     let player = {};
+    console.log("Hell of rom connect 💥💥✅✅")
     // A player has connected
     // The event that runs on join that does init game stuff
     socket.on('init', (playerObj, ackCallBack) =>  {
