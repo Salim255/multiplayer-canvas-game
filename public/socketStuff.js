@@ -1,15 +1,18 @@
 // Connect to socket server
 // Connect to the main namespace
-const socket = io.connect('http://localhost:3500');
+const socket = io("https://multiplayer-canvas-game.onrender.com", {
+  transports: ["websocket"]
+});
 
 // We will call this init function, when user
 // click on start game
 const init = async () => {
+ 
     const initData = await socket.emitWithAck('init',  {
-        // Player comes from uiStuff.js
-        playerName: player.name
+    // Player comes from uiStuff.js
+    playerName: player.name
     })
-
+  
     // Our await has resolved, so start talking
     setInterval(() => {
         socket.emit('tock', {

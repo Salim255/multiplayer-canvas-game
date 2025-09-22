@@ -1,5 +1,5 @@
 // Where all our socketStuff will go
-const io = require('../../server').io;
+const { io } = require('../../server');
 // oh... we need express, get app, but only put what we need to inside 
 // of our socket stuff
 const app  = require('../../server').app;
@@ -33,15 +33,13 @@ let tickTockInterval ;
 // On server start, to make our initial defaultNumberOfOrbs
 initGame();
 
-
-
 // This run every time, someone join the main namespace
 io.on('connect', (socket) => {
     let player = {};
+    console.log("Hell of rom connect 💥💥✅✅")
     // A player has connected
     // The event that runs on join that does init game stuff
     socket.on('init', (playerObj, ackCallBack) =>  {
-        console.log(player, "Hello object")
         player = playerObj;
         // Someone is about to be added to the players, 
         // start tick-tocking
@@ -153,6 +151,7 @@ io.on('connect', (socket) => {
     })
 })
 function initGame(){
+    console.log('init game')
     // Loop defaultNumberOfOrbs times, and push a new orb to our array
     for ( let i = 0; i < settings.defaultNumberOfOrbs; i++ ) {
         const newOrb = new Orb(settings)
